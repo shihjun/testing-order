@@ -1,8 +1,8 @@
 {
    "type": "mssql",
    "host": "localhost",
-   "username": "mingxiangchan",
-   "password": "123123",
+   "username": "shihjun",
+   "password": "dell@12345",
    "database": "appointments",
    "synchronize": true,
    "logging": false,
