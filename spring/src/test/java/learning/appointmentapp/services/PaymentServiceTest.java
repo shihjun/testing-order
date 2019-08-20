@@ -64,8 +64,9 @@ public class PaymentServiceTest {
   }
 
   @Test
-  public void testCreateOrderFail() {
-    // Given: empty order
+  public void testCreatePaymentFail() {
+    // Given:
+    // unhappy: order doesn't exist in DB
     List<Order> order = new ArrayList<Order>();
 
     // When: creating a payment
@@ -73,6 +74,45 @@ public class PaymentServiceTest {
 
     // Then:
     assertEquals(null, payment);
+
+  }
+
+  @Test
+  public void testRefundPaymentSuccess() {
+    // Given: a payment is created for an order with line items
+    Product product1 = seedProduct("handphone", 500);
+    Product product2 = seedProduct("laptop", 1000);
+    Order order = seedOrder();
+    seedLineItem(product1, order, 2);
+    seedLineItem(product2, order, 3);
+    Payment payment = seedPayment(order);
+
+    // When: refunding a payment
+    Payment refundPayment = paymentService.refundPayment(payment);
+
+    // Then:
+    assertEquals(true, refundPayment.getRefunded());
+
+  }
+
+  @Test
+  public void testRefundPaymentFail() {
+    // Given:
+    Order order = seedOrder();
+    Payment payment = new Payment();
+    payment.setOrder(order);
+    payment.setAmount(1000);
+    // unhappy: order isn't paid
+    payment.setPaid(false);
+    // unhappy: refunded is already true
+    payment.setRefunded(true);
+    paymentRepo.save(payment);
+
+    // When: refunding a payment
+    Payment refundPayment = paymentService.refundPayment(payment);
+
+    // Then:
+    assertEquals(null, refundPayment);
 
   }
 
@@ -101,6 +141,21 @@ public class PaymentServiceTest {
     lineItemRepo.save(lineItem);
 
     return lineItem;
+  }
+
+  Payment seedPayment(Order order) {
+    Payment payment = new Payment();
+    List<LineItem> lineItems = lineItemRepo.findAllByOrder(order);
+    long paymentAmount = 0;
+    for (int i = 0; i < lineItems.size(); i++) {
+      paymentAmount += lineItems.get(i).getPrice();
+    }
+    payment.setOrder(order);
+    payment.setAmount(paymentAmount);
+    payment.setPaid(true);
+    payment.setRefunded(false);
+    paymentRepo.save(payment);
+    return payment;
   }
 
 }

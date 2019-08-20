@@ -49,4 +49,20 @@ public class PaymentService {
       return null;
     }
   }
+
+  public Payment refundPayment(Payment payment) {
+
+    if (payment != null) {
+      Payment existingPayment = paymentRepo.findById(payment.getId()).orElse(new Payment());
+      if (existingPayment.getPaid() == true && existingPayment.getRefunded() == false) {
+        existingPayment.setRefunded(true);
+        paymentRepo.save(existingPayment);
+        return existingPayment;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
 }

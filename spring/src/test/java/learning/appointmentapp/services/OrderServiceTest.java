@@ -59,10 +59,6 @@ public class OrderServiceTest {
   @Test
   public void testCreateOrderFail() {
     // Given: either empty product or 0 quantity
-    // Empty product
-    seedProduct("handphone", 500);
-    seedProduct("laptop", 1000);
-    // 0 quantity
     long[] quantity = { 2, 0 };
 
     // When: create order
