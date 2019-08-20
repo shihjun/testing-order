@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -50,9 +49,9 @@ public class BookingServiceTest {
 
     // Then
     // result should be an array of LocalDateTime
-    assertEquals(3, results.size());
-    // TODO: check that the 3 elements in the array match the appointments we
+    // check that the 3 elements in the array match the appointments we
     // created
+    assertEquals(3, results.size());
 
   }
 

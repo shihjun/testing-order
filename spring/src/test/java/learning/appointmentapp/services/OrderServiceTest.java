@@ -2,8 +2,6 @@ package learning.appointmentapp.services;
 
 import static org.junit.Assert.assertEquals;
 
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -15,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import learning.appointmentapp.entities.LineItem;
-import learning.appointmentapp.entities.Order;
 import learning.appointmentapp.entities.Product;
 import learning.appointmentapp.repositories.LineItemRepository;
 import learning.appointmentapp.repositories.OrderRepository;
@@ -61,10 +58,12 @@ public class OrderServiceTest {
 
   @Test
   public void testCreateOrderFail() {
-    // Given: product and quantity info
-    // seedProduct("handphone", 500);
-    // seedProduct("laptop", 1000);
-    long[] quantity = { 2, 5 };
+    // Given: either empty product or 0 quantity
+    // Empty product
+    seedProduct("handphone", 500);
+    seedProduct("laptop", 1000);
+    // 0 quantity
+    long[] quantity = { 2, 0 };
 
     // When: create order
     List<Product> productList = productRepo.findAll();

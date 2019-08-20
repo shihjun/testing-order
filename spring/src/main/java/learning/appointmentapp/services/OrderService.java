@@ -28,11 +28,6 @@ public class OrderService {
   public List<LineItem> createOrder(List<Product> products, long[] quantity) {
 
     Boolean zeroQtyForAProduct = false;
-    // create order
-    Order order = new Order();
-    orderRepo.save(order);
-
-    // create line_item
     List<LineItem> lineItemList = new ArrayList<LineItem>();
 
     // check is 0 quantity for a product
@@ -42,8 +37,12 @@ public class OrderService {
       }
     }
 
-    // checkinvalid product, doesn't exist in DB
+    // check invalid product, doesn't exist in DB
     if (products.size() != 0 && zeroQtyForAProduct != true) {
+      // create order
+      Order order = new Order();
+      orderRepo.save(order);
+      // create line_item
       for (int i = 0; i < products.size(); i++) {
         long lineItemPrice = products.get(i).getPrice() * quantity[i];
         LineItem lineItem = new LineItem();
